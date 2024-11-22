@@ -122,7 +122,7 @@ function get_wC_sq(R,L,m)
 
     wC_sq = 0
     for n in range(0,n_terms-1)
-        wC_sq += cc[n+1]*(n^2+15*n+56)*(R/L)^n  
+        wC_sq += cc[n+1]*(n+7)*(n+8)*(R/L)^n  
     end
     wC_sq *= 2*hb*c*R^6/(m*pi*L^9)
 
@@ -182,7 +182,7 @@ end
 
 #writing the data in output file
 #-------------------------------------------------------------
-open("output-Entanglement.dat","w") do out_file
+open("out-Entanglement.dat","w") do out_file
     write(out_file, "Time (s) \t Logarithmic Negativity \t von-Neumann Entropy \n"  )
     for line in table
         write(out_file,line)
