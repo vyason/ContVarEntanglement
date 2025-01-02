@@ -20,6 +20,8 @@
 #
 #-----------------------------------------------------------------------
 
+using PyFormattedStrings
+
 
 #Global Parameters
 #-------------------------------------------------- 
@@ -145,7 +147,7 @@ sig = 1e-9
 w0 = hb/(2*m*sig^2)
 
 tmax = 10
-npts = 1+100
+npts = 1+10
 
 t_list = range(0,tmax,npts)
 
@@ -174,7 +176,7 @@ vnent = zeros(npts)
 table = String[]
 for idx in range(1,npts)
     lneg[idx],vnent[idx] = Calc_Entanglement(t_list[idx],m,w0,w)
-    line = "$(t_list[idx]) \t $(lneg[idx]) \t $(vnent[idx]) \n"
+    line = f"{t_list[idx]:f} \t {lneg[idx]:e} \t {vnent[idx]:e} \n"
     push!(table,line)
     print( line )
 end
