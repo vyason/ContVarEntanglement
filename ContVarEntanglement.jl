@@ -54,13 +54,18 @@ end
 # calculate entanglement at a given time
 # outputs = Logarithmic Negativity, Entanglement Entropy
 #--------------------------------------------------
-function calc_Entanglement(t,m,w0,w,nbar=0)
+function calc_Entanglement(t_list,m,w0,w,nbar=0)
 
-    detA,detB,detG,detCM = CovMat_FreeFall(t,m,w0,w)
-    LogNeg,Entropy = Entanglement_from_CovMat(detA,detB,detG,detCM,nbar)
+    npts = length(t_list)
+
+    lneg,vnent = zeros(npts),zeros(npts)
+    for idx in 1:npts
+        detA,detB,detG,detCM = CovMat_FreeFall(t_list[idx],m,w0,w)
+        lneg[idx],vnent[idx] = Entanglement_from_CovMat(detA,detB,detG,detCM,nbar)
+    end
 
     #-------------------------------
-    return LogNeg,Entropy
+    return lneg,vnent
 end
 
 
@@ -70,13 +75,13 @@ function Entanglement_from_CovMat(detA,detB,detG,detCM,nbar=0)
     
     SumT = detA+detB-2*detG    
     numT = sqrt( SumT - sqrt(SumT^2-4*detCM) ) / sqrt(2)
-    LogNeg = max( 0, -log2( (2*nbar+1)*2*numT ) )
+    lneg = max( 0, -log2( (2*nbar+1)*2*numT ) )
     
     ee = (2*nbar+1)*sqrt(detA)
-    Entropy = (ee+1/2)*log2(ee+1/2) - (ee-1/2)*log2(ee-1/2)
+    vnent = (ee+1/2)*log2(ee+1/2) - (ee-1/2)*log2(ee-1/2)
 
     #-------------------------------
-    return LogNeg,Entropy
+    return lneg,vnent
 end
 
 
@@ -170,22 +175,16 @@ w_sq = wN_sq
 # calculations for given Parameters
 #--------------------------------------------
 w = sqrt(wN_sq)
-lneg,vnent  = zeros(npts), zeros(npts)
-table = Vector{String}(undef,npts)
-for idx in 1:npts
-    lneg[idx],vnent[idx] = calc_Entanglement(t_list[idx],m,w0,w)
-    line = f"{t_list[idx]:f} \t {lneg[idx]:e} \t {vnent[idx]:e} \n"
-    table[idx] = line
-    print( line )
-end
+lneg,vnent = calc_Entanglement(t_list,m,w0,w)
 
 
 #writing the data in output file
 #-------------------------------------------------------------
 open("table-Entanglement.dat","w") do out_file
     write(out_file, "Time (s) \t LogNeg \t von-Neumann Entropy \n"  )
-    for line in table
+    for idx in 1:npts
+        line = f"{t_list[idx]:f} \t {lneg[idx]:e} \t {vnent[idx]:e} \n"
         write(out_file,line)
+        print( line )
     end
-
 end
