@@ -137,15 +137,15 @@ end
 #--------------------------------------------------
 rho = rho_Pt
 
-m = 0.25*1e-12*1e-3
+m = 1e-15
 R0 = Rad_f_Mass(m,rho)
 
-L = 2.5*R0
-sig = 2.5e-9
+L = 10*R0
+sig = 1e-9
 w0 = hb/(2*m*sig^2)
 
-tmax = 5
-npts = 1+10
+tmax = 10
+npts = 1+100
 
 t_list = range(0,tmax,npts)
 
