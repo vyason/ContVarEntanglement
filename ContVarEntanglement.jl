@@ -39,14 +39,14 @@ const rho_SiO2 = 2.65e3
 
 # calculate mass from radius
 #--------------------------------------------------
-function Mass_f_Rad(rad,rho)
+function mass_from_rad(rad,rho)
     return rho * 4/3*pi*rad^3
 end
 
 
 # calculate radius from mass
 #--------------------------------------------------
-function Rad_f_Mass(mass,rho)
+function rad_from_mass(mass,rho)
     return ( 3*mass/(4*pi*rho) )^(1.0/3)
 end
 
@@ -54,10 +54,10 @@ end
 # calculate entanglement at a given time
 # outputs = Logarithmic Negativity, Entanglement Entropy
 #--------------------------------------------------
-function Calc_Entanglement(t,m,w0,w,nbar=0)
+function calc_Entanglement(t,m,w0,w,nbar=0)
 
     detA,detB,detG,detCM = CovMat_FreeFall(t,m,w0,w)
-    LogNeg,Entropy = Entanglement_CovMat(detA,detB,detG,detCM,nbar)
+    LogNeg,Entropy = Entanglement_from_CovMat(detA,detB,detG,detCM,nbar)
 
     #-------------------------------
     return LogNeg,Entropy
@@ -66,7 +66,7 @@ end
 
 # retrn values of entanglement given a Covariance matrix
 #--------------------------------------------------
-function Entanglement_CovMat(detA,detB,detG,detCM,nbar=0)
+function Entanglement_from_CovMat(detA,detB,detG,detCM,nbar=0)
     
     SumT = detA+detB-2*detG    
     numT = sqrt( SumT - sqrt(SumT^2-4*detCM) ) / sqrt(2)
@@ -106,7 +106,7 @@ end
 # wC_sq is defined in https://doi.org/10.1103/PhysRevD.109.L101501
 # form of interaction and constants taken from https://doi.org/10.1103/PhysRevLett.99.170403
 #--------------------------------------------------
-function get_wC_sq(R,L,m)
+function get_wsq_Casimir(R,L,m)
 
     n_terms = 10
     cc = zeros(n_terms)
@@ -139,7 +139,7 @@ end
 rho = rho_Pt
 
 m = 1e-15
-R0 = Rad_f_Mass(m,rho)
+R0 = rad_from_mass(m,rho)
 
 L = 10*R0
 sig = 1e-9
@@ -154,12 +154,12 @@ t_list = range(0,tmax,npts)
 # omega^2 for different interactions
 #----------------------------------
 
-wN_sq = 4*G*m/L^3
-#wM_sq = 8/3*(sqrt(2)-1)*sqrt(G*m*a0)/L^2
-#wM_sq = get_wC_sq(R0,L,m)
+wN_sq = 4*G*m/L^3                               #Newtonian
+#wM_sq = 8/3*(sqrt(2)-1)*sqrt(G*m*a0)/L^2       #MOND
+#wC_sq = get_wC_sq(R0,L,m)                      #Casimir
 
-#wNC_sq = wN_sq + wM_sq
-#wMC_sq = wM_sq + wM_sq
+#wNC_sq = wN_sq + wM_sq                 #Newton+Casimir
+#wMC_sq = wM_sq + wM_sq                 #MOND+Casimir
 
 
 # choose the interaction
@@ -170,13 +170,12 @@ w_sq = wN_sq
 # calculations for given Parameters
 #--------------------------------------------
 w = sqrt(wN_sq)
-lneg  = zeros(npts)
-vnent = zeros(npts)
-table = String[]
-for idx in range(1,npts)
-    lneg[idx],vnent[idx] = Calc_Entanglement(t_list[idx],m,w0,w)
+lneg,vnent  = zeros(npts), zeros(npts)
+table = Vector{String}(undef,npts)
+for idx in 1:npts
+    lneg[idx],vnent[idx] = calc_Entanglement(t_list[idx],m,w0,w)
     line = f"{t_list[idx]:f} \t {lneg[idx]:e} \t {vnent[idx]:e} \n"
-    push!(table,line)
+    table[idx] = line
     print( line )
 end
 
@@ -184,7 +183,7 @@ end
 #writing the data in output file
 #-------------------------------------------------------------
 open("table-Entanglement.dat","w") do out_file
-    write(out_file, "Time (s) \t Logarithmic Negativity \t von-Neumann Entropy \n"  )
+    write(out_file, "Time (s) \t LogNeg \t von-Neumann Entropy \n"  )
     for line in table
         write(out_file,line)
     end
