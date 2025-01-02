@@ -1,8 +1,11 @@
 # Entanglement Dynamics in Quantum Continuous-Variable States
 
 
+**The code has been benchmarked with Julia 1.11**
 
-**Based on**
+
+
+**Following are the references for the underlying theory of this code**
 
 1. Ankit Kumar et. al, Quantum **7**, 1008 (2023)
    https://quantum-journal.org/papers/q-2023-05-15-1008/
@@ -12,8 +15,7 @@
 
 
 
-
-**Publications using this code**
+**Following is the list of publications that have utilized this code**
 
 1. Ankit Kumar et. al, Quantum **7**, 1008 (2023)
    https://quantum-journal.org/papers/q-2023-05-15-1008/

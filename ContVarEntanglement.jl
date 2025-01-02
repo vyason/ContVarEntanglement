@@ -57,11 +57,10 @@ end
 function calc_Entanglement(t_list,m,w0,w,nbar=0)
 
     npts = length(t_list)
-
     lneg,vnent = zeros(npts),zeros(npts)
     for idx in 1:npts
-        detA,detB,detG,detCM = CovMat_FreeFall(t_list[idx],m,w0,w)
-        lneg[idx],vnent[idx] = Entanglement_from_CovMat(detA,detB,detG,detCM,nbar)
+        inputs = [CovMat_FreeFall(t_list[idx],m,w0,w)...,nbar]
+        lneg[idx],vnent[idx] = Entanglement_from_CovMat(inputs)
     end
 
     #-------------------------------
@@ -71,7 +70,8 @@ end
 
 # retrn values of entanglement given a Covariance matrix
 #--------------------------------------------------
-function Entanglement_from_CovMat(detA,detB,detG,detCM,nbar=0)
+function Entanglement_from_CovMat(inputs)
+    detA,detB,detG,detCM,nbar = inputs
     
     SumT = detA+detB-2*detG    
     numT = sqrt( SumT - sqrt(SumT^2-4*detCM) ) / sqrt(2)
@@ -103,7 +103,7 @@ function CovMat_FreeFall(t,m,w0,w)
     detCM = 1.0/16          # | Covariance Matrix sigma |
 
     #-------------------------------
-    return detA,detB,detG,detCM
+    return [detA,detB,detG,detCM]
 end
 
 
@@ -127,9 +127,7 @@ function get_wsq_Casimir(R,L,m)
     cc[10] = 274953589659739. / 275251200.
 
     wC_sq = 0
-    for n in range(0,n_terms-1)
-        wC_sq += cc[n+1]*(n+7)*(n+8)*(R/L)^n  
-    end
+    [ wC_sq += cc[n+1]*(n+7)*(n+8)*(R/L)^n ]
     wC_sq *= 2*hb*c*R^6/(m*pi*L^9)
 
     #-------------------------------
@@ -149,6 +147,8 @@ R0 = rad_from_mass(m,rho)
 L = 10*R0
 sig = 1e-9
 w0 = hb/(2*m*sig^2)
+
+nbar = 0
 
 tmax = 10
 npts = 1+10
@@ -175,7 +175,7 @@ w_sq = wN_sq
 # calculations for given Parameters
 #--------------------------------------------
 w = sqrt(wN_sq)
-lneg,vnent = calc_Entanglement(t_list,m,w0,w)
+lneg,vnent = calc_Entanglement(t_list,m,w0,w,nbar)
 
 
 #writing the data in output file
