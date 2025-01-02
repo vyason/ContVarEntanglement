@@ -1,5 +1,4 @@
-# Julia code for interaction-mediated entanglement in
-# Continuous-Variable gaussian states
+# Julia code for interaction-mediated entanglement in continuous-variable gaussian states
 # Copyright (C) 2024  Ankit Kumar
 # Email: kumar.ankit.vyas@gmail.com
 #-----------------------------------------------------------------------
