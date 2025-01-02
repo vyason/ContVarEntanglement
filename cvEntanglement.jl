@@ -184,7 +184,7 @@ end
 
 #writing the data in output file
 #-------------------------------------------------------------
-open("out-Entanglement.dat","w") do out_file
+open("table-Entanglement.dat","w") do out_file
     write(out_file, "Time (s) \t Logarithmic Negativity \t von-Neumann Entropy \n"  )
     for line in table
         write(out_file,line)
