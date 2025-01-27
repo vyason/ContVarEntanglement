@@ -1,7 +1,7 @@
 # Entanglement Dynamics in Quantum Continuous-Variable States
 
 
-**The code has been benchmarked with Julia 1.11**
+** This code generates the gain of entaglement between two uncorrelated Gaussians. At $t=0$ the two masses start interacting with a central potential interaction, e.g., Gravity, Casimir, Coulomb etc. The code works even when many interactions are acting side by side, e.g., Gravity + Casimir in the laboratory. The comments are provided inside the code for the user to give proper inputs. **
 
 
 
