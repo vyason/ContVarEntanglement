@@ -3,10 +3,7 @@
 
 This code generates the gain of entaglement between two uncorrelated Gaussians. At $t=0$ the two masses start interacting with a central potential interaction, e.g., Gravity, Casimir, Coulomb etc. The code works even when many interactions are acting side by side, e.g., Gravity + Casimir in the laboratory. The comments are provided inside the code for the user to give proper inputs.
 
-**The theoretical background has been developed in collaboration with Tomasz Paterek (Gdansk, Poland) and P. Arumugam (Roorkee, India):**
-
-Ankit Kumar, PhD Thesis, https://arxiv.org/pdf/2405.07362
-
+The theoretical background has been developed in collaboration with Tomasz Paterek (Gdansk, Poland) and P. Arumugam (Roorkee, India): Ankit Kumar, PhD Thesis, https://arxiv.org/pdf/2405.07362
 
 
 **Following is the list of publications that have utilized this code**
